@@ -47,5 +47,10 @@ class TestSequenceMemory(unittest.TestCase):
         self.sequence_memory.add_sequence(self.seq)
         self.assertEqual(True, self.sequence_memory.exists_message(self.m0))
 
+    def test_get_sequence_by_message(self):
+        self.sequence_memory.add_sequence(self.seq)
+        self.assertEqual(
+            self.seq, self.sequence_memory.get_sequence_by_message(self.m0))
+
 if __name__ == '__main__':
     unittest.main()
