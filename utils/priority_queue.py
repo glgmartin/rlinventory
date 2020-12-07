@@ -1,42 +1,25 @@
-import heapq
-from itertools import count
+from queue import PriorityQueue
 
-class PriorityQueue(object):
+class EventQueue(object):
     def __init__(self):
-        self._heap = []
-        self.entry_finder = {}
-        self.counter = count()
+        self.queue = PriorityQueue()
 
-    def push(self, priority, item):
-        count = next(self.counter)
-        entry = [priority, count, item]
-        self.entry_finder[item] = entry
-        heapq.heappush(self._heap, entry)
+    def push(self, element):
+        self.queue.put(element)
 
     def pop(self):
-        if self._heap:
-            priority, count, item = heapq.heappop(self._heap)
-            del self.entry_finder[item]
-            return item
-        raise KeyError('pop from an empty priority queue')
+        return self.queue.get()
 
-    def __len__(self):
-        return len(self._heap)
+    def remove(self, element):
+        for i in range(self.size()):
+            if self.queue.queue[i] == element:
+                x = self.queue.queue[i]
+                self.queue.queue.remove(x)
+                return x
+        return None
 
-    def __iter__(self):
-        return self
+    def has_more(self):
+        return self.size() > 0
 
-    def __next__(self):
-        try:
-            return self.pop()
-        except IndexError or KeyError:
-            raise StopIteration
-
-if __name__ == "__main__":
-    l = PriorityQueue()
-    l.push(10, 'last')
-    l.push(1, 'first')
-    l.push(5, 'middol')
-    for x in l:
-        print(x)
-    print(len(l))
+    def size(self):
+        return self.queue.qsize()
