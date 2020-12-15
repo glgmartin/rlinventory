@@ -1,7 +1,7 @@
-from simulation.messages import Message
+from simulation.tasks import Task
 
 class Sequence(object):
-    # a Sequence is a directed graph of Messages
+    # a Sequence is a directed graph of TasksMessages
     def __init__(self, graph):
         self.graph = graph
         self.finished = False
@@ -9,8 +9,8 @@ class Sequence(object):
 
     def get_reachable(self, message):
         candidates = []
-        if message.state == Message.DONE:
-            return self.graph.neighbors_for_vertex(message)
+        if task.state == Task.DONE:
+            return self.graph.neighbors_for_vertex(task)
         else:
             return []
 
@@ -22,7 +22,7 @@ class Sequence(object):
             candidates = self.frontier
         while candidates:
             candidate = candidates.pop()
-            if candidate.state != Message.DONE:
+            if candidate.state != Task.DONE:
                 if candidate not in frontier:
                     frontier.append(candidate)
             else:
@@ -35,18 +35,18 @@ class Sequence(object):
 
     def is_finished(self):
         return all(
-            [message.state == Message.DONE for message in self.graph.vertices]
+            [task.state == Task.DONE for task in self.graph.vertices]
         )
 
-    def push(self, message):
-        message.sim.push(message)
+    def push_task(self, task):
+        task.sim.push(task)
 
     def update(self):
         self.frontier = self.find_frontier()
-        for message in self.frontier:
-            if message.state == Message.PENDING and message.is_ready():
-                message.state = Message.READY
-                self.push(message)
+        for task in self.frontier:
+            if task.state == Task.PENDING and task.is_ready():
+                task.state = Task.READY
+                self.push_task(task)
 
     def __repr__(self):
         return f"Sequence from Graph\n{self.graph}"

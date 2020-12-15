@@ -43,5 +43,15 @@ class TestFinishedMessage(unittest.TestCase):
     def test_is_ready(self):
         self.assertEqual(self.m2.is_ready(), 1)
 
+class TestCloning(unittest.TestCase):
+    def setUp(self):
+        self.m0 = Message('sim', 1, 'han', 'cmd')
+        self.m1 = Message('sim', 1, 'han', 'cmd', preqs=[self.m0])
+
+    def test_clone(self):
+        m_clone = self.m1.clone()
+        self.assertEqual(m_clone.preqs, [])
+        self.assertEqual(m_clone.state, Message.PENDING)
+
 if __name__ == '__main__':
     unittest.main()

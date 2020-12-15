@@ -1,6 +1,6 @@
 from .events import PriorityEvent
 
-class Message(PriorityEvent):
+class Task(PriorityEvent):
 
     PENDING = 0
     READY = 1
@@ -22,9 +22,10 @@ class Message(PriorityEvent):
         if self.preqs == []:
             return True
         else:
-            return all([message.state == Message.DONE for message in \
+            return all([task.state == Task.DONE for task in \
                 self.preqs])
 
-if __name__ == '__main__':
-    msg = Message('e', 5, 'h', 'do')
-    print(msg.state, msg.is_ready())
+    def clone(self):
+        return Task(sim=self.sim, time=self.time, priority=self.priority, \
+            handler=self.handler, cmd=self.cmd, state= Task.PENDING, \
+            preqs=[])

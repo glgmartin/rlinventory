@@ -145,6 +145,10 @@ class TestSequenceFinished(unittest.TestCase):
         self.seq.update()
         self.assertEqual(self.seq.find_frontier(), [])
 
+class TestCloneSequence(unittest.TestCase):
+    def setUp(self):
+        
+
 if __name__ == '__main__':
     unittest.main()
 
